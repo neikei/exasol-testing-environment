@@ -1,0 +1,6 @@
+ - hosts: all
+   roles:
+    - role: basics
+    - role: updates
+    - role: docker
+    - role: exasol

@@ -1,0 +1,30 @@
+##################################################
+### Run Exasol container
+- name: "Create Exasol data folder"
+  file: 
+    path: "/exa"
+    state: directory 
+    recurse: yes
+
+- name: "Start Exasol - stay calm and wait... (Docker image: ~4.3GB)"
+  docker_container:
+    name: "Exasol"
+    image: "exasol/docker-db:{{ exasol_version }}"
+    state: "started"
+    restart_policy: "always"
+    privileged: yes
+    stop_timeout: 120
+    volumes:
+      - exa_volume:/exa
+    ports:
+      - "{{ ansible_eth1.ipv4.address }}:8899:8888"
+
+##################################################
+### Connection information and credentials
+- name: Connection information and credentials
+  debug:
+    msg: >-
+      Host: {{ ansible_eth1.ipv4.address }}
+      Port: 8899
+      User: sys
+      Password: exasol
